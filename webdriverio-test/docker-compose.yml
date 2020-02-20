@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  chrome-container:
+    container_name: chrome-container
+    image: selenium/standalone-chrome
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "4444:4444"
+    # can just be expose - 4444, but this allows you to see localhost:4444/wd/hub/static/resource/hub.html
+    logging:
+      driver: "json-file"
+  
+  webdriverio-container:
+    container_name: webdriverio-container
+    build: .
+    command: bash -c 'sleep 10; npm test;'
+    depends_on:
+      - chrome-container
